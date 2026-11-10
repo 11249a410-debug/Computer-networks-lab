@@ -1,0 +1,61 @@
+//Write a code for error correction code (like CRC). 
+
+def xor(a, b):
+    result = []
+    for i in range(1, len(b)):
+        if a[i] == b[i]:
+            result.append('0')
+        else:
+            result.append('1')
+    return ''.join(result)
+
+
+def mod2div(dividend, divisor):
+    pick = len(divisor)
+    temp = dividend[0:pick]
+
+    while pick < len(dividend):
+        if temp[0] == '1':
+            temp = xor(divisor, temp) + dividend[pick]
+        else:
+            temp = xor('0' * pick, temp) + dividend[pick]
+        pick += 1
+
+    if temp[0] == '1':
+        temp = xor(divisor, temp)
+    else:
+        temp = xor('0' * len(divisor), temp)
+
+    return temp
+
+
+# Sender Side
+data = input("Enter Data Bits: ")
+key = input("Enter Generator Polynomial: ")
+
+if not data or not key or any(bit not in '01' for bit in data + key):
+    print("Error: Enter valid binary bits only.")
+elif key[0] != '1' or key[-1] != '1' or len(key) < 2:
+    print("Error: Generator polynomial must start and end with 1.")
+else:
+    appended_data = data + '0' * (len(key) - 1)
+    remainder = mod2div(appended_data, key)
+    codeword = data + remainder
+
+    print("\nCRC Remainder:", remainder)
+    print("Transmitted Codeword:", codeword)
+
+    # Receiver Side
+    received = input("\nEnter Received Codeword: ")
+
+    if not received or any(bit not in '01' for bit in received):
+        print("Error: Enter a valid binary codeword.")
+    elif len(received) < len(key):
+        print("Error: Received codeword is too short.")
+    else:
+        check = mod2div(received, key)
+
+        if '1' not in check:
+            print("No Error Detected")
+        else:
+            print("Error Detected")
