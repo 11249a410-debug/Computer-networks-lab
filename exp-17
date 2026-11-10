@@ -1,0 +1,35 @@
+TOPOLOGY COMPARISON
+Topology	Arrangement	Advantages	Disadvantages
+Bus	All nodes share one common backbone cable with terminators at both ends.	Simple; least cabling; inexpensive.	One cable fault can stop the whole network; difficult to troubleshoot.
+Star	Every node connects to a central hub/switch.	Easy to add/remove nodes; one node fault does not affect others.	Central device failure stops the network; more cable is needed.
+Ring	Nodes form a closed loop; data passes node to node.	Orderly, predictable data flow; no collisions with token passing.	A single break can halt the ring; adding nodes disrupts it.
+Mesh	Every node links directly to every other node.	Highly reliable; multiple paths; fault tolerant.	Very expensive; large amount of cabling.
+Tree	Groups of star networks joined to a bus backbone.	Scalable; suitable for large structured networks.	Backbone failure affects large sections; complex.
+Hybrid	Combination of two or more topologies.	Flexible; can be tailored to needs.	Design and management are complex and costly.
+
+
+
+
+PROCEDURE
+1.Place the LAN Trainer Kit on the bench, connect its power supply and switch it on. Confirm that the indicator lamps/LEDs are functioning.
+2.Identify the individual node modules, central hub/switch module, backbone connector and supplied patch cords.
+3.Bus topology: connect all node modules along the common backbone line and fit terminators at both ends.
+4.Send data from one node and observe that the signal travels along the shared backbone and is seen by all nodes; only the addressed node accepts it.
+5.Disconnect the backbone at a midpoint and note that communication beyond the break stops.
+6.Star topology: connect each node module by a separate patch cord to a port on the central hub/switch module.
+7.Transmit from one node and observe that data passes through the central module to reach the destination node.
+8.Disconnect one node's cable and confirm that other nodes continue communicating. Then power off the central module and note that the whole network stops.
+9.Ring topology: wire the node modules in a closed loop, connecting the output of each node to the input of the next until the last node connects back to the first.
+10.Send data and observe it circulating from node to node until it reaches the intended destination.
+11.Open the loop at one link and observe that the ring's data flow is interrupted.
+12.Mesh topology: using the available patch cords, connect each node module directly to every other node module.
+13.Transmit between two nodes and observe that multiple direct paths allow communication to continue even if one link is removed.
+14.For each topology, record the number of cables used, the path taken by the data, and the effect of a single link or node failure.
+
+OBSERVATION TABLE
+The table below gives the general cable count and behaviour for the topologies described in the manual.
+Topology	Cables used (for n nodes)	Effect of one link failure	Ease of adding a node
+Bus	n + backbone	Whole segment may fail	Easy
+Star	n	Only that node is affected	Very easy
+Ring	n	Ring flow interrupted	Difficult
+Mesh	n(n−1)/2	No effect (alternate paths)	Difficult
