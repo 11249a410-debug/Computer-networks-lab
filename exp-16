@@ -1,0 +1,10 @@
+OBSERVATION
+Command: PC> ping 192.168.1.2
+Illustrative output:
+Pinging 192.168.1.2 with 32 bytes of data:
+Reply from 192.168.1.2: bytes=32 time<1ms TTL=128
+Reply from 192.168.1.2: bytes=32 time<1ms TTL=128
+Reply from 192.168.1.2: bytes=32 time<1ms TTL=128
+Reply from 192.168.1.2: bytes=32 time<1ms TTL=128
+Ping statistics for 192.168.1.2: Sent = 4, Received = 4, Lost = 0 (0% loss)
+If the first request times out, it may be due to ARP resolving the MAC address; subsequent replies confirm that the link is working.
