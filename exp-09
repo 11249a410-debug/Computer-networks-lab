@@ -1,0 +1,105 @@
+# Experiment 10: Link State Routing Algorithm using NS2
+
+# File Name: link_state_routing.tcl
+
+# Step 1: Create the simulator
+set ns [new Simulator]
+
+# Step 2: Create trace and NAM files
+set tracefile [open link_state.tr w]
+set namfile [open link_state.nam w]
+
+# Enable tracing
+$ns trace-all $tracefile
+$ns namtrace-all $namfile
+
+# Step 3: Define traffic color
+$ns color 1 Blue
+
+# Step 4: Define the finish procedure
+proc finish {} {
+    global ns tracefile namfile
+
+    $ns flush-trace
+
+    close $tracefile
+    close $namfile
+
+    puts "=========================================="
+    puts "Link State Routing Simulation Completed"
+    puts "Trace file created: link_state.tr"
+    puts "NAM file created: link_state.nam"
+    puts "=========================================="
+
+    exec nam link_state.nam &
+    exit 0
+}
+
+# Step 5: Create four network nodes
+set n0 [$ns node]
+set n1 [$ns node]
+set n2 [$ns node]
+set n3 [$ns node]
+
+# Step 6: Assign node labels
+$n0 label "Source"
+$n1 label "Router A"
+$n2 label "Router B"
+$n3 label "Destination"
+
+# Step 7: Create bidirectional links
+# Syntax:
+# $ns duplex-link node1 node2 bandwidth delay queue_type
+
+$ns duplex-link $n0 $n1 10Mb 10ms DropTail
+$ns duplex-link $n0 $n2 10Mb 10ms DropTail
+$ns duplex-link $n1 $n3 10Mb 10ms DropTail
+$ns duplex-link $n2 $n3 10Mb 10ms DropTail
+$ns duplex-link $n1 $n2 5Mb 20ms DropTail
+
+# Step 8: Arrange the topology in NAM
+$ns duplex-link-op $n0 $n1 orient right-up
+$ns duplex-link-op $n0 $n2 orient right-down
+$ns duplex-link-op $n1 $n3 orient right-down
+$ns duplex-link-op $n2 $n3 orient right-up
+$ns duplex-link-op $n1 $n2 orient right
+
+# Step 9: Enable Link State routing
+$ns rtproto LS
+
+# Step 10: Create a UDP sender
+set udp [new Agent/UDP]
+$udp set packetSize_ 512
+$udp set fid_ 1
+
+# Attach UDP sender to the source node
+$ns attach-agent $n0 $udp
+
+# Step 11: Create a UDP receiver
+set null [new Agent/Null]
+
+# Attach receiver to the destination node
+$ns attach-agent $n3 $null
+
+# Connect sender and receiver
+$ns connect $udp $null
+
+# Step 12: Create Constant Bit Rate traffic
+set cbr [new Application/Traffic/CBR]
+$cbr set packetSize_ 512
+$cbr set interval_ 0.05
+$cbr set random_ false
+
+# Attach CBR traffic to the UDP agent
+$cbr attach-agent $udp
+
+# Step 13: Schedule the traffic
+$ns at 1.0 "$cbr start"
+$ns at 8.0 "$cbr stop"
+
+# Step 14: Schedule simulation completion
+$ns at 9.0 "finish"
+
+# Step 15: Start the simulation
+puts "Starting Link State Routing Simulation..."
+$ns run
